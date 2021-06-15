@@ -1,0 +1,87 @@
+\begin{frame}
+    \frametitle{Methodology}
+    \begin{columns}
+        \column[t]{5cm}
+        Simulated 5 fuel cycle scenarios in \Cyclus \cite{huff_fundamental_2016}
+    \begin{itemize}
+        \item \textbf{Scenario 1:} Current fleet of \glspl{LWR}
+        \item \textbf{Scenario 2:} No growth transition to \gls{USNC} \gls{MMR}\textsuperscript{TM}
+        \item \textbf{Scenario 3:} No growth transition to X-energy Xe-100
+        \item \textbf{Scenario 4:} 1\% growth transition to \gls{USNC} \gls{MMR}\textsuperscript{TM}
+        \item \textbf{Scenario 5:} 1\% growth transition to X-energy Xe-100
+    \end{itemize}
+
+    \column[t]{5cm}
+    \begingroup
+        \renewcommand{\arraystretch}{1.5} % Default value: 1
+        \vspace{-0.8cm}
+        \begin{table}[t!]
+            \small
+            \caption{Advanced reactor design specifications}
+            \label{tab:reactor_summary}
+            \begin{tabular}{ p{1.5cm} p{1.5cm} p{1.25cm}}
+                \hline
+                Design Criteria & \gls{USNC} \gls{MMR}\textsuperscript{TM} & 
+                    X-Energy Xe-100 \\\hline
+                
+                Reactor Type & Modular HTGR & Modular HTGR \\
+                Power Output (MWe) & 10 & 75 \\
+                Enrichment (\% $^{235}U$) & 13 & 15.5 \\
+                Cycle Length (years) & 20 & Online Refuel\\
+                Fuel Form & TRISO Compacts & TRISO Pebbles\\
+                Reactor Lifetime & 20 years & 60 years \\
+                \hline
+            \end{tabular}
+        \end{table}   
+        \endgroup
+    \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Simulation Details}
+    \begin{columns}
+        \column[t]{4cm}
+    \begin{itemize}
+        \item Simulations model reactor deployment from 1965-2090
+        \item \gls{LWR} commission dates are obtained from the IAEA \gls{PRIS}
+              database \cite{noauthor_power_1989}
+        \item \glspl{LWR} are assumed to operate for 60 years, unless they 
+              were decommissioned by December 2020
+        \item Transitions begin in 2025
+        \item Timestep of one month
+    \end{itemize}
+
+    \column[t]{6cm}
+    \begin{figure}[t]
+        \centering
+        \begin{tikzpicture}[node distance=0.6cm]
+            \node (mine) [facility] {\tiny Uranium Mine};
+            \node (mill) [facility, below of=mine] {\tiny Uranium Mill};
+            \node (conversion) [facility, below of=mill] {\tiny Conversion};
+            \node (enrichment) [facility, below of=conversion]{\tiny Enrichment};
+            \node (fabrication) [facility, below of=enrichment]{\tiny Fuel Fabrication};
+            \node (reactor) [facility, below of=fabrication, xshift=-1.5cm]{\tiny LWR};
+            \node (adv_reactor) [transition, below of=fabrication, xshift=1.5cm]{\tiny Advanced Reactor};
+            \node (wetstorage) [facility, below of=reactor]{\tiny Wet Storage};
+            \node (drystorage) [facility, below of=wetstorage]{\tiny Dry Storage};
+            \node (sinkhlw) [facility, below of=drystorage, xshift=1.5cm]{\tiny HLW Sink};
+            \node (sinkllw) [facility, right of=enrichment,xshift=1cm]{\tiny LLW Sink};
+    
+            \draw [arrow] (mine) -- node[anchor=east]{\tiny Natural U} (mill); 
+            \draw [arrow] (mill) -- node[anchor=east]{\tiny U$_3$O$_8$}(conversion); 
+            \draw [arrow] (conversion) -- node[anchor=east]{\tiny UF$_6$}(enrichment);
+            \draw [arrow] (enrichment) -- node[anchor=east]{\tiny Enriched U}(fabrication);
+            \draw [arrow] (enrichment) -- node[anchor=south]{\tiny Tails}(sinkllw);
+            \draw [arrow] (fabrication) -- node[anchor=east]{\tiny Fresh UOX}(reactor);
+            \draw [arrow] (fabrication) -- node[anchor=west]{\tiny TRSIO fuel}(adv_reactor);
+            \draw [arrow] (reactor) -- node[anchor=east]{\tiny Spent UOX}(wetstorage);
+            \draw [arrow] (wetstorage) -- node[anchor=east]{\tiny Cool Spent UOX}(drystorage);
+            \draw [arrow] (drystorage) -- node[anchor=east]{\tiny Casked Spent UOX}(sinkhlw);
+            \draw [arrow] (adv_reactor) -- node[anchor=west]{\tiny Spent TRISO Fuel}(sinkhlw);
+    
+            \end{tikzpicture}
+        \caption{Fuel cycle facilities and material flow between facilities.}
+        \label{fig:fuel_cycle}
+    \end{figure}
+\end{columns}
+\end{frame}
