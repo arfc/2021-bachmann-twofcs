@@ -1,7 +1,7 @@
 \begin{frame}
     \frametitle{Methodology}
     \begin{columns}
-        \column[t]{5cm}
+        \column[t]{4.5cm}
         Simulated 5 fuel cycle scenarios in \Cyclus \cite{huff_fundamental_2016}
     \begin{itemize}
         \item \textbf{Scenario 1:} Current fleet of \glspl{LWR}
@@ -11,9 +11,9 @@
         \item \textbf{Scenario 5:} 1\% growth transition to X-energy Xe-100
     \end{itemize}
 
-    \column[t]{5cm}
+    \column[t]{5.5cm}
     \begingroup
-        \renewcommand{\arraystretch}{1.5} % Default value: 1
+        \renewcommand{\arraystretch}{1.3} % Default value: 1
         \vspace{-0.8cm}
         \begin{table}[t!]
             \small
@@ -23,13 +23,13 @@
                 \hline
                 Design Criteria & \gls{USNC} \gls{MMR}\textsuperscript{TM} & 
                     X-Energy Xe-100 \\\hline
-                
                 Reactor Type & Modular HTGR & Modular HTGR \\
                 Power Output (MWe) & 10 & 75 \\
                 Enrichment (\% $^{235}U$) & 13 & 15.5 \\
-                Cycle Length (years) & 20 & Online Refuel\\
+                Cycle Length (yr) & 20 & Online Refuel\\
                 Fuel Form & TRISO Compacts & TRISO Pebbles\\
                 Reactor Lifetime & 20 years & 60 years \\
+                Burnup ($\frac{MWd}{kg U}$) & 42.7 & 160 \\
                 \hline
             \end{tabular}
         \end{table}   
@@ -55,17 +55,17 @@
     \begin{figure}[t]
         \centering
         \begin{tikzpicture}[node distance=0.6cm]
-            \node (mine) [facility] {\tiny Uranium Mine};
-            \node (mill) [facility, below of=mine] {\tiny Uranium Mill};
-            \node (conversion) [facility, below of=mill] {\tiny Conversion};
-            \node (enrichment) [facility, below of=conversion]{\tiny Enrichment};
-            \node (fabrication) [facility, below of=enrichment]{\tiny Fuel Fabrication};
-            \node (reactor) [facility, below of=fabrication, xshift=-1.5cm]{\tiny LWR};
+            \node (mine) [agent] {\tiny Uranium Mine};
+            \node (mill) [agent, below of=mine] {\tiny Uranium Mill};
+            \node (conversion) [agent, below of=mill] {\tiny Conversion};
+            \node (enrichment) [agent, below of=conversion]{\tiny Enrichment};
+            \node (fabrication) [agent, below of=enrichment]{\tiny Fuel Fabrication};
+            \node (reactor) [agent, below of=fabrication, xshift=-1.5cm]{\tiny LWR};
             \node (adv_reactor) [transition, below of=fabrication, xshift=1.5cm]{\tiny Advanced Reactor};
-            \node (wetstorage) [facility, below of=reactor]{\tiny Wet Storage};
-            \node (drystorage) [facility, below of=wetstorage]{\tiny Dry Storage};
-            \node (sinkhlw) [facility, below of=drystorage, xshift=1.5cm]{\tiny HLW Sink};
-            \node (sinkllw) [facility, right of=enrichment,xshift=1cm]{\tiny LLW Sink};
+            \node (wetstorage) [agent, below of=reactor]{\tiny Wet Storage};
+            \node (drystorage) [agent, below of=wetstorage]{\tiny Dry Storage};
+            \node (sinkhlw) [agent, below of=drystorage, xshift=1.5cm]{\tiny HLW Sink};
+            \node (sinkllw) [agent, right of=enrichment,xshift=1cm]{\tiny LLW Sink};
     
             \draw [arrow] (mine) -- node[anchor=east]{\tiny Natural U} (mill); 
             \draw [arrow] (mill) -- node[anchor=east]{\tiny U$_3$O$_8$}(conversion); 
@@ -84,4 +84,45 @@
         \label{fig:fuel_cycle}
     \end{figure}
 \end{columns}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Agent Hierarchy}
+    \begin{figure}[t]
+        \centering
+        \begin{tikzpicture}[node distance=1cm]
+            \node (region) [region] {United States};
+            \node (inst1) [institution, below of=region, xshift=2cm] {Fuel Cycle};
+            \node (inst2) [institution, below of=region, xshift=-2cm] {Nation};
+            \node (lwr) [facility, below of=inst2] {LWRs};
+            \node (mine) [facility, below of=inst1, xshift=-1.5cm] {Mine};
+            \node (mill) [facility, below of=mine] {Mill};
+            \node (conversion) [facility, below of=mill] {Conversion};
+            \node (enrichment) [facility, below of=conversion] {Enrichment};
+            \node (fuelfab) [facility, below of=enrichment] {Fuel Fabrication};
+            \node (ad_rx) [facility, below of=inst1, xshift=1.5cm] {Advanced Reactor};
+            \node (wet_stor) [facility, below of=ad_rx] {Wet Storage};
+            \node (dry_stor) [facility, below of=wet_stor] {Dry Storage};
+            \node (llw_sink) [facility, below of=dry_stor] {LLW Sink};
+            \node (hlw_sink) [facility, below of=llw_sink] {HLW Sink};
+
+            \draw [connect] (region) -- (inst1);
+            \draw [connect] (region) -- (inst2);
+            \draw [connect] (inst2) -- (lwr);
+            \draw [connect] (inst1) -- (mine);
+            \draw [connect] (inst1) -- (ad_rx);
+            \draw [connect] (mine) -- (mill);
+            \draw [connect] (mill) -- (conversion);
+            \draw [connect] (conversion) -- (enrichment);
+            \draw [connect] (enrichment) -- (fuelfab);
+            \draw [connect] (ad_rx) -- (wet_stor);
+            \draw [connect] (wet_stor) -- (dry_stor);
+            \draw [connect] (dry_stor) -- (llw_sink);
+            \draw [connect] (llw_sink) -- (hlw_sink);
+
+        \end{tikzpicture}
+        \caption{Oranization of agents in the simulations, green shows the region, red shows institutions,
+        and blue shows the facilities.}
+        \label{fig:hierarchy}        
+    \end{figure}
 \end{frame}
