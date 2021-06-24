@@ -92,36 +92,36 @@
         \centering
         \begin{tikzpicture}[node distance=1cm]
             \node (region) [region] {United States};
-            \node (inst1) [institution, below of=region, xshift=2cm] {Fuel Cycle};
+            \node (inst1) [institution, below of=region, xshift=2.5cm] {Fuel Cycle};
             \node (inst2) [institution, below of=region, xshift=-2cm] {Nation};
             \node (lwr) [facility, below of=inst2] {LWRs};
-            \node (mine) [facility, below of=inst1, xshift=-1.5cm] {Mine};
+            \node (mine) [facility, below of=inst1, xshift=-2.5cm] {Mine};
             \node (mill) [facility, below of=mine] {Mill};
             \node (conversion) [facility, below of=mill] {Conversion};
-            \node (enrichment) [facility, below of=conversion] {Enrichment};
+            \node (enrichment) [facility, below of=inst1] {Enrichment};
             \node (fuelfab) [facility, below of=enrichment] {Fuel Fabrication};
-            \node (ad_rx) [facility, below of=inst1, xshift=1.5cm] {Advanced Reactor};
-            \node (wet_stor) [facility, below of=ad_rx] {Wet Storage};
+            \node (ad_rx) [facility, below of=fuelfab] {Advanced Reactor};
+            \node (wet_stor) [facility, below of=inst1, xshift=3cm] {Wet Storage};
             \node (dry_stor) [facility, below of=wet_stor] {Dry Storage};
             \node (llw_sink) [facility, below of=dry_stor] {LLW Sink};
-            \node (hlw_sink) [facility, below of=llw_sink] {HLW Sink};
+            \node (hlw_sink) [facility, below of=lwr] {HLW Sink};
 
             \draw [connect] (region) -- (inst1);
             \draw [connect] (region) -- (inst2);
             \draw [connect] (inst2) -- (lwr);
             \draw [connect] (inst1) -- (mine);
-            \draw [connect] (inst1) -- (ad_rx);
+            \draw [connect] (fuelfab) -- (ad_rx);
             \draw [connect] (mine) -- (mill);
             \draw [connect] (mill) -- (conversion);
-            \draw [connect] (conversion) -- (enrichment);
+            \draw [connect] (inst1) -- (enrichment);
             \draw [connect] (enrichment) -- (fuelfab);
-            \draw [connect] (ad_rx) -- (wet_stor);
+            \draw [connect] (inst1) -- (wet_stor);
             \draw [connect] (wet_stor) -- (dry_stor);
             \draw [connect] (dry_stor) -- (llw_sink);
-            \draw [connect] (llw_sink) -- (hlw_sink);
+            \draw [connect] (lwr) -- (hlw_sink);
 
         \end{tikzpicture}
-        \caption{Oranization of agents in the simulations, green shows the region, red shows institutions,
+        \caption{Oranization of agents in the simulations, green shows the region, red shows the institutions,
         and blue shows the facilities.}
         \label{fig:hierarchy}        
     \end{figure}
